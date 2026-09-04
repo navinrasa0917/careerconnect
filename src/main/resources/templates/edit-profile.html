@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareerConnect - Edit Profile</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 70px;
+            background: #1e3a8a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 45px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 30px;
+            color: #1e3a8a;
+        }
+
+        .page-title p {
+            margin-top: 7px;
+            color: #64748b;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            color: #1e3a8a;
+            font-size: 20px;
+            margin-bottom: 22px;
+        }
+
+        /* FORM GRID */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #2563eb;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .small-textarea {
+            min-height: 100px;
+        }
+
+        /* BUTTONS */
+
+        .button-area {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .cancel-btn {
+            padding: 12px 22px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            color: #334155;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: #1d4ed8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 10px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: span 1;
+            }
+
+            .button-area {
+                flex-direction: column;
+            }
+
+            .cancel-btn,
+            .save-btn {
+                text-align: center;
+                width: 100%;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            CareerConnect
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/home">
+                Dashboard
+            </a>
+
+            <a href="/profile">
+                Profile
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="container">
+
+
+        <div class="page-title">
+
+            <h1>
+                Edit Student Profile
+            </h1>
+
+            <p>
+                Update your academic, career and personal information.
+            </p>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form action="/profile/update" method="post">
+            <input type="hidden"
+       id="userId"
+       name="id"
+       th:value="${user.id}">
+
+
+
+            <!-- BASIC INFORMATION -->
+
+            <div class="card">
+
+                <h2>
+                    Basic Information
+                </h2>
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Full Name
+                        </label>
+
+                        <input type="text" id="name" name="name" th:value="${user.name}" required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input type="email" id="email" name="email" th:value="${user.email}" readonly>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone Number
+                        </label>
+
+                        <input type="text" id="phone" name="phone" th:value="${user.phone}"
+                            placeholder="Enter phone number">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="college">
+                            College
+                        </label>
+
+                        <input type="text" id="college" name="college" th:value="${user.college}"
+                            placeholder="Enter your college">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="department">
+                            Department
+                        </label>
+
+                        <input type="text" id="department" name="department" th:value="${user.department}"
+                            placeholder="Example: Computer Science and Engineering">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="year">
+                            Year
+                        </label>
+
+                        <select id="year" name="year">
+
+                            <option value="">
+                                Select Year
+                            </option>
+
+                            <option value="1st Year" th:selected="${user.year == '1st Year'}">
+                                1st Year
+                            </option>
+
+                            <option value="2nd Year" th:selected="${user.year == '2nd Year'}">
+                                2nd Year
+                            </option>
+
+                            <option value="3rd Year" th:selected="${user.year == '3rd Year'}">
+                                3rd Year
+                            </option>
+
+                            <option value="4th Year" th:selected="${user.year == '4th Year'}">
+                                4th Year
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="cgpa">
+                            CGPA
+                        </label>
+
+                        <input type="number" id="cgpa" name="cgpa" th:value="${user.cgpa}" step="0.01" min="0" max="10"
+                            placeholder="Example: 8.50">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CAREER INFORMATION -->
+
+            <div class="card">
+
+                <h2>
+                    Career Information
+                </h2>
+
+                <div class="form-grid">
+
+
+                    <div class="form-group full">
+
+                        <label for="skills">
+                            Skills
+                        </label>
+
+                        <input type="text" id="skills" name="skills" th:value="${user.skills}"
+                            placeholder="Example: Java, Python, HTML, CSS, SQL">
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label for="careerGoal">
+                            Career Goal
+                        </label>
+
+                        <textarea id="careerGoal" name="careerGoal" class="small-textarea"
+                            placeholder="What career are you aiming for?" th:text="${user.careerGoal}"></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ABOUT ME -->
+
+            <div class="card">
+
+                <h2>
+                    About Me
+                </h2>
+
+                <div class="form-group">
+
+                    <label for="aboutMe">
+                        Tell us about yourself
+                    </label>
+
+                    <textarea id="aboutMe" name="aboutMe"
+                        placeholder="Write about yourself, your interests, personality, strengths and what makes you unique..."
+                        th:text="${user.aboutMe}"></textarea>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HOBBIES -->
+
+            <div class="card">
+
+                <h2>
+                    Hobbies & Interests
+                </h2>
+
+                <div class="form-group">
+
+                    <label for="hobbies">
+                        Your hobbies and interests
+                    </label>
+
+                    <textarea id="hobbies" name="hobbies"
+                        placeholder="Example: Cricket, gaming, music, photography, travelling..."
+                        th:text="${user.hobbies}"></textarea>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ACHIEVEMENTS -->
+
+            <div class="card">
+
+                <h2>
+                    Achievements
+                </h2>
+
+                <div class="form-group">
+
+                    <label for="achievements">
+                        Your achievements
+                    </label>
+
+                    <textarea id="achievements" name="achievements"
+                        placeholder="Mention hackathons, certifications, projects, awards, competitions, etc."
+                        th:text="${user.achievements}"></textarea>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FUTURE GOALS -->
+
+            <div class="card">
+
+                <h2>
+                    Future Goals
+                </h2>
+
+                <div class="form-group">
+
+                    <label for="futureGoals">
+                        Your future goals and aspirations
+                    </label>
+
+                    <textarea id="futureGoals" name="futureGoals"
+                        placeholder="Where do you see yourself in the future? What do you want to achieve?"
+                        th:text="${user.futureGoals}"></textarea>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="button-area">
+
+                <a href="/profile" class="cancel-btn">
+                    Cancel
+                </a>
+
+                <button type="submit" class="save-btn">
+                    Save Profile
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+    <footer>
+
+        © 2026 CareerConnect • Student Career & Placement Portal
+
+    </footer>
+
+
+</body>
+
+</html>
