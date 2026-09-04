@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareerConnect - Apply</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .navbar {
+            height: 70px;
+            background: #2563eb;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 40px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .back {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .job-summary {
+            background: white;
+            padding: 25px;
+            margin-top: 20px;
+            margin-bottom: 25px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .job-summary h1 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .company {
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        .form-card {
+            background: white;
+            padding: 30px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .form-card h2 {
+            color: #1e3a8a;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+            color: #334155;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #2563eb;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-area {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+
+            margin-top: 25px;
+        }
+
+        .cancel-btn {
+            padding: 12px 22px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            color: #334155;
+
+            background: white;
+        }
+
+        .submit-btn {
+            padding: 12px 25px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+    <div class="logo">
+        CareerConnect
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/home">
+            Dashboard
+        </a>
+
+        <a href="/jobs">
+            Jobs
+        </a>
+
+        <a href="/profile">
+            Profile
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+
+    <a href="/jobs" class="back">
+        ← Back to Jobs
+    </a>
+
+
+    <!-- JOB SUMMARY -->
+
+    <div class="job-summary">
+
+        <h1 th:text="${job.title}">
+            Software Developer
+        </h1>
+
+        <div class="company"
+             th:text="${job.company}">
+            Company Name
+        </div>
+
+    </div>
+
+
+    <!-- APPLICATION FORM -->
+
+    <div class="form-card">
+
+        <h2>
+            Apply for this Position
+        </h2>
+
+
+        <form th:action="@{/jobs/{id}/apply(id=${job.id})}"
+              method="post">
+
+
+            <!-- RESUME -->
+
+            <div class="form-group">
+
+                <label for="resume">
+                    Resume
+                </label>
+
+                <input
+                    type="text"
+                    id="resume"
+                    name="resume"
+                    placeholder="Enter your resume file name or link"
+                    required>
+
+            </div>
+
+
+            <!-- COVER LETTER -->
+
+            <div class="form-group">
+
+                <label for="coverLetter">
+                    Cover Letter / Why should we hire you?
+                </label>
+
+                <textarea
+                    id="coverLetter"
+                    name="coverLetter"
+                    placeholder="Explain why you are suitable for this position..."
+                    required></textarea>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="submit-area">
+
+                <a href="/jobs"
+                   class="cancel-btn">
+
+                    Cancel
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="submit-btn">
+
+                    Submit Application
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
