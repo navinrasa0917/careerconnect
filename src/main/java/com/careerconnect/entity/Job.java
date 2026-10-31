@@ -91,6 +91,13 @@ public class Job {
     private String status;
 
 
+    // Company that created this job (null for jobs posted without a company login)
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company postedBy;
+
+
     // Constructor
 
     public Job() {
@@ -327,5 +334,13 @@ public class Job {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Company getPostedBy() {
+        return postedBy;
+    }
+
+    public void setPostedBy(Company postedBy) {
+        this.postedBy = postedBy;
     }
 }

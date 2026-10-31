@@ -1,6 +1,7 @@
 package com.careerconnect.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,6 +30,16 @@ public class Application {
     private String status;
 
     private LocalDateTime appliedAt;
+
+    // Placement drive details (filled by the company when the student is selected)
+    private LocalDate driveDate;
+
+    private String driveTime;
+
+    private String driveVenue;
+
+    @Column(columnDefinition = "TEXT")
+    private String driveNotes;
 
 
     // Default Constructor
@@ -94,5 +105,38 @@ public class Application {
 
     public void setAppliedAt(LocalDateTime appliedAt) {
         this.appliedAt = appliedAt;
+    }
+
+
+    public LocalDate getDriveDate() {
+        return driveDate;
+    }
+
+    public void setDriveDate(LocalDate driveDate) {
+        this.driveDate = driveDate;
+    }
+
+    public String getDriveTime() {
+        return driveTime;
+    }
+
+    public void setDriveTime(String driveTime) {
+        this.driveTime = driveTime;
+    }
+
+    public String getDriveVenue() {
+        return driveVenue;
+    }
+
+    public void setDriveVenue(String driveVenue) {
+        this.driveVenue = driveVenue;
+    }
+
+    public String getDriveNotes() {
+        return driveNotes;
+    }
+
+    public void setDriveNotes(String driveNotes) {
+        this.driveNotes = driveNotes;
     }
 }

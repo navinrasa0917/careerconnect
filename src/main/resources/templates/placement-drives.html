@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerConnect - Placement Drives</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background: #f4f7fb; color: #333; }
+        .navbar { height: 70px; background: #2563eb; color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
+        .logo { font-size: 25px; font-weight: bold; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 25px; }
+        .nav-links a.current { font-weight: bold; text-decoration: underline; }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #1e3a8a; }
+        .subtitle { margin-top: 8px; color: #64748b; margin-bottom: 25px; }
+        .card { background: white; padding: 22px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 16px; }
+        .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+        .card h2 { color: #2563eb; font-size: 18px; margin-bottom: 6px; }
+        .company { font-weight: bold; color: #475569; margin-bottom: 10px; }
+        .meta { color: #64748b; font-size: 13px; line-height: 1.7; }
+        .status { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; white-space: nowrap; }
+        .status.Applied { background: #dbeafe; color: #1d4ed8; }
+        .status.Shortlisted { background: #fef3c7; color: #b45309; }
+        .status.Selected { background: #dcfce7; color: #15803d; }
+        .status.Rejected { background: #fee2e2; color: #b91c1c; }
+        .empty { background: white; padding: 40px; border-radius: 12px; text-align: center; color: #64748b; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
+        .btn { display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 14px; border: none; cursor: pointer; }
+        .btn:hover { background: #1d4ed8; }
+        .banner { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
+        .banner a { color: #2563eb; font-weight: bold; }
+        .section-title { color: #1f2937; font-size: 18px; margin: 30px 0 14px; }
+
+        .drive { display: flex; gap: 20px; align-items: flex-start; }
+        .date-box { min-width: 70px; height: 75px; background: #eff6ff; color: #2563eb; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; }
+        .date-box .day { font-size: 26px; }
+        .date-box .month { font-size: 12px; }
+        .date-box .year { font-size: 11px; color: #64748b; }
+        .drive-body { flex: 1; }
+        .past .date-box { background: #f1f5f9; color: #64748b; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">CareerConnect</div>
+    <div class="nav-links">
+        <a href="/home">Dashboard</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/applications">My Applications</a>
+        <a href="/placement-drives" class="current">Placement Drives</a>
+        <a href="/profile">Profile</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <h1>Placement Drives</h1>
+    <p class="subtitle">Drives you have been selected for through your applications.</p>
+
+    <h3 class="section-title">Upcoming Drives</h3>
+
+    <div class="empty" th:if="${#lists.isEmpty(upcomingDrives)}">
+        No upcoming drives yet. When a company selects you, the drive will appear here.
+    </div>
+
+    <div class="card" th:each="app : ${upcomingDrives}">
+        <div class="drive">
+            <div class="date-box">
+                <span class="day" th:text="${#temporals.format(app.driveDate, 'dd')}">05</span>
+                <span class="month" th:text="${#strings.toUpperCase(#temporals.format(app.driveDate, 'MMM'))}">SEP</span>
+                <span class="year" th:text="${#temporals.format(app.driveDate, 'yyyy')}">2026</span>
+            </div>
+            <div class="drive-body">
+                <div class="row">
+                    <div>
+                        <h2 th:text="${app.job.title}">Job Title</h2>
+                        <div class="company" th:text="${app.job.company}">Company</div>
+                    </div>
+                    <span class="status Selected">Selected</span>
+                </div>
+                <div class="meta">
+                    🗓 <span th:text="${#temporals.format(app.driveDate, 'EEEE, dd MMMM yyyy')}"></span>
+                    <span th:if="${app.driveTime != null and !#strings.isEmpty(app.driveTime)}">
+                        &nbsp;|&nbsp; ⏰ <span th:text="${app.driveTime}"></span>
+                    </span>
+                    <br th:if="${app.driveVenue != null and !#strings.isEmpty(app.driveVenue)}">
+                    <span th:if="${app.driveVenue != null and !#strings.isEmpty(app.driveVenue)}">
+                        📍 <span th:text="${app.driveVenue}"></span>
+                    </span>
+                    <br th:if="${app.driveNotes != null and !#strings.isEmpty(app.driveNotes)}">
+                    <span th:if="${app.driveNotes != null and !#strings.isEmpty(app.driveNotes)}">
+                        📝 <span th:text="${app.driveNotes}"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(pastDrives)}">
+        <h3 class="section-title">Past Drives</h3>
+
+        <div class="card past" th:each="app : ${pastDrives}">
+            <div class="drive">
+                <div class="date-box">
+                    <span class="day" th:text="${#temporals.format(app.driveDate, 'dd')}">05</span>
+                    <span class="month" th:text="${#strings.toUpperCase(#temporals.format(app.driveDate, 'MMM'))}">SEP</span>
+                    <span class="year" th:text="${#temporals.format(app.driveDate, 'yyyy')}">2026</span>
+                </div>
+                <div class="drive-body">
+                    <h2 th:text="${app.job.title}">Job Title</h2>
+                    <div class="company" th:text="${app.job.company}">Company</div>
+                    <div class="meta" th:if="${app.driveVenue != null and !#strings.isEmpty(app.driveVenue)}">
+                        📍 <span th:text="${app.driveVenue}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

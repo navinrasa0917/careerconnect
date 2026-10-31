@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerConnect - Company Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background: #f4f7fb; color: #333; }
+        .navbar { height: 70px; background: #2563eb; color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
+        .logo { font-size: 25px; font-weight: bold; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 25px; }
+        .nav-links a.current { font-weight: bold; text-decoration: underline; }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #1e3a8a; }
+        .subtitle { margin-top: 8px; color: #64748b; margin-bottom: 25px; }
+        .card { background: white; padding: 22px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 16px; }
+        .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+        .card h2 { color: #2563eb; font-size: 18px; margin-bottom: 6px; }
+        .company { font-weight: bold; color: #475569; margin-bottom: 10px; }
+        .meta { color: #64748b; font-size: 13px; line-height: 1.7; }
+        .status { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; white-space: nowrap; }
+        .status.Applied { background: #dbeafe; color: #1d4ed8; }
+        .status.Shortlisted { background: #fef3c7; color: #b45309; }
+        .status.Selected { background: #dcfce7; color: #15803d; }
+        .status.Rejected { background: #fee2e2; color: #b91c1c; }
+        .empty { background: white; padding: 40px; border-radius: 12px; text-align: center; color: #64748b; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
+        .btn { display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 14px; border: none; cursor: pointer; }
+        .btn:hover { background: #1d4ed8; }
+        .banner { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
+        .banner a { color: #2563eb; font-weight: bold; }
+        .section-title { color: #1f2937; font-size: 18px; margin: 30px 0 14px; }</style>
+</head>
+<body>
+<div class="navbar">
+    <div class="logo">CareerConnect &middot; Company</div>
+    <div class="nav-links">
+        <a href="/company/dashboard">My Jobs</a>
+        <a href="/company/jobs/new">+ Create Job</a>
+        <a href="/company/logout">Logout</a>
+    </div>
+</div>
+<div class="container">
+    <div class="row" style="align-items:center;">
+        <div>
+            <h1 th:text="${company.name}">Company</h1>
+            <p class="subtitle">Manage your job openings and choose students for your drives.</p>
+        </div>
+        <a href="/company/jobs/new" class="btn">+ Create Job</a>
+    </div>
+
+    <div class="empty" th:if="${#lists.isEmpty(jobs)}">
+        You haven't created any jobs yet.<br><br>
+        <a href="/company/jobs/new" class="btn">Create your first job</a>
+    </div>
+
+    <div class="card" th:each="job : ${jobs}">
+        <div class="row">
+            <div>
+                <h2 th:text="${job.title}">Job Title</h2>
+                <div class="meta">
+                    📍 <span th:text="${job.location}"></span>
+                    &nbsp;|&nbsp; <span th:text="${job.jobType}"></span>
+                    &nbsp;|&nbsp; <span th:text="${job.salary}"></span>
+                    <br>
+                    Posted <span th:text="${job.postedDate}"></span>
+                    <span th:if="${job.applicationDeadline != null}">
+                        &nbsp;|&nbsp; Deadline <span th:text="${job.applicationDeadline}"></span>
+                    </span>
+                </div>
+            </div>
+            <a th:href="@{/company/jobs/{id}/applicants(id=${job.id})}" class="btn">View Applicants</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

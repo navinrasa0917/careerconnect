@@ -514,7 +514,7 @@
             Welcome <strong th:text="${name}"></strong>!
         </div>
 
-        <button class="logout">
+        <button class="logout" onclick="window.location.href='/logout'">
             Logout
         </button>
 
@@ -549,11 +549,11 @@
              Jobs
         </a>
 
-        <a href="#" class="menu-item">
+        <a href="/placement-drives" class="menu-item">
              Placement Drives
         </a>
 
-        <a href="#" class="menu-item">
+        <a href="/applications" class="menu-item">
              My Applications
         </a>
 
@@ -565,7 +565,7 @@
              Settings
         </a>
 
-        <a href="#" class="menu-item">
+        <a href="/logout" class="menu-item">
              Logout
         </a>
 
@@ -622,7 +622,7 @@
                 </h3>
 
                 <div class="stat-number">
-                    5
+                    <span th:text="${applicationCount}">0</span>
                 </div>
 
                 <p>
@@ -639,7 +639,7 @@
                 </h3>
 
                 <div class="stat-number">
-                    8
+                    <span th:text="${driveCount}">0</span>
                 </div>
 
                 <p>
@@ -696,99 +696,45 @@
                     </div>
 
 
-                    <div class="job">
+                    <div class="job" th:each="job : ${recommendedJobs}">
 
                         <div class="job-top">
 
                             <div>
 
                                 <h3>
-                                    Software Developer
+                                    <a th:href="@{/jobs/{id}(id=${job.id})}"
+                                       th:text="${job.title}"
+                                       style="color: inherit; text-decoration: none;">
+                                        Job Title
+                                    </a>
                                 </h3>
 
-                                <div class="company">
-                                    Tech Solutions Pvt. Ltd.
+                                <div class="company" th:text="${job.company}">
+                                    Company
                                 </div>
 
                             </div>
 
-                            <button class="apply-btn">
+                            <a class="apply-btn"
+                               th:href="@{/jobs/{id}/apply(id=${job.id})}"
+                               style="text-decoration: none; display: inline-block; height: fit-content;">
                                 Apply
-                            </button>
+                            </a>
 
                         </div>
 
                         <div class="job-details">
-                            📍 Chennai &nbsp; | &nbsp;
-                             6 LPA &nbsp; | &nbsp;
-                             Full Time
+                            📍 <span th:text="${job.location}"></span> &nbsp; | &nbsp;
+                            <span th:text="${job.salary}"></span> &nbsp; | &nbsp;
+                            <span th:text="${job.jobType}"></span>
                         </div>
 
                     </div>
 
-
-
-                    <div class="job">
-
-                        <div class="job-top">
-
-                            <div>
-
-                                <h3>
-                                    Java Developer
-                                </h3>
-
-                                <div class="company">
-                                    Career Technologies
-                                </div>
-
-                            </div>
-
-                            <button class="apply-btn">
-                                Apply
-                            </button>
-
-                        </div>
-
-                        <div class="job-details">
-                            📍 Bangalore &nbsp; | &nbsp;
-                             7 LPA &nbsp; | &nbsp;
-                             Full Time
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="job">
-
-                        <div class="job-top">
-
-                            <div>
-
-                                <h3>
-                                    Web Developer
-                                </h3>
-
-                                <div class="company">
-                                    Digital Innovations
-                                </div>
-
-                            </div>
-
-                            <button class="apply-btn">
-                                Apply
-                            </button>
-
-                        </div>
-
-                        <div class="job-details">
-                            📍 Chennai &nbsp; | &nbsp;
-                             5 LPA &nbsp; | &nbsp;
-                             Full Time
-                        </div>
-
-                    </div>
+                    <p th:if="${#lists.isEmpty(recommendedJobs)}" style="color:#777; font-size:13px;">
+                        No jobs to recommend right now. Check back soon!
+                    </p>
 
                 </div>
 
@@ -804,74 +750,36 @@
                             Recent Applications
                         </h2>
 
-                        <a href="#" class="view-all">
+                        <a href="/applications" class="view-all">
                             View All
                         </a>
 
                     </div>
 
 
-                    <div class="application">
+                    <div class="application" th:each="app : ${recentApplications}">
 
                         <div>
 
-                            <h3>
+                            <h3 th:text="${app.job.title}">
                                 Software Developer
                             </h3>
 
-                            <p>
-                                Tech Solutions Pvt. Ltd.
+                            <p th:text="${app.job.company}">
+                                Company
                             </p>
 
                         </div>
 
-                        <span class="status">
+                        <span class="status" th:text="${app.status}">
                             Applied
                         </span>
 
                     </div>
 
-
-                    <div class="application">
-
-                        <div>
-
-                            <h3>
-                                Java Developer
-                            </h3>
-
-                            <p>
-                                Career Technologies
-                            </p>
-
-                        </div>
-
-                        <span class="status">
-                            Shortlisted
-                        </span>
-
-                    </div>
-
-
-                    <div class="application">
-
-                        <div>
-
-                            <h3>
-                                Web Developer
-                            </h3>
-
-                            <p>
-                                Digital Innovations
-                            </p>
-
-                        </div>
-
-                        <span class="status">
-                            Applied
-                        </span>
-
-                    </div>
+                    <p th:if="${#lists.isEmpty(recentApplications)}" style="color:#777; font-size:13px;">
+                        You have not applied for any jobs yet.
+                    </p>
 
                 </div>
 
@@ -897,15 +805,15 @@
                     </div>
 
 
-                    <div class="drive">
+                    <div class="drive" th:each="d : ${upcomingDrives}">
 
                         <div class="date-box">
 
-                            <span class="day">
+                            <span class="day" th:text="${#temporals.format(d.driveDate, 'dd')}">
                                 05
                             </span>
 
-                            <span class="month">
+                            <span class="month" th:text="${#strings.toUpperCase(#temporals.format(d.driveDate, 'MMM'))}">
                                 SEP
                             </span>
 
@@ -913,77 +821,21 @@
 
                         <div class="drive-info">
 
-                            <h3>
-                                TCS Placement Drive
+                            <h3 th:text="${d.job.company} + ' - ' + ${d.job.title}">
+                                Company Drive
                             </h3>
 
-                            <p>
-                                College Campus
+                            <p th:text="${d.driveVenue != null and !#strings.isEmpty(d.driveVenue)} ? ${d.driveVenue} : 'Venue to be announced'">
+                                Venue
                             </p>
 
                         </div>
 
                     </div>
 
-
-
-                    <div class="drive">
-
-                        <div class="date-box">
-
-                            <span class="day">
-                                12
-                            </span>
-
-                            <span class="month">
-                                SEP
-                            </span>
-
-                        </div>
-
-                        <div class="drive-info">
-
-                            <h3>
-                                Infosys Recruitment
-                            </h3>
-
-                            <p>
-                                College Campus
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="drive">
-
-                        <div class="date-box">
-
-                            <span class="day">
-                                20
-                            </span>
-
-                            <span class="month">
-                                SEP
-                            </span>
-
-                        </div>
-
-                        <div class="drive-info">
-
-                            <h3>
-                                Wipro Hiring Drive
-                            </h3>
-
-                            <p>
-                                Online Assessment
-                            </p>
-
-                        </div>
-
-                    </div>
+                    <p th:if="${#lists.isEmpty(upcomingDrives)}" style="color:#777; font-size:13px;">
+                        No upcoming drives yet.
+                    </p>
 
                 </div>
 
@@ -1019,7 +871,7 @@
                             Browse Jobs
                         </a>
 
-                        <a href="#" class="action">
+                        <a href="/applications" class="action">
                             <br>
                             My Applications
                         </a>

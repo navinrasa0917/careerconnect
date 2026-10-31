@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerConnect - Applicants</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background: #f4f7fb; color: #333; }
+        .navbar { height: 70px; background: #2563eb; color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
+        .logo { font-size: 25px; font-weight: bold; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 25px; }
+        .nav-links a.current { font-weight: bold; text-decoration: underline; }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #1e3a8a; }
+        .subtitle { margin-top: 8px; color: #64748b; margin-bottom: 25px; }
+        .card { background: white; padding: 22px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 16px; }
+        .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+        .card h2 { color: #2563eb; font-size: 18px; margin-bottom: 6px; }
+        .company { font-weight: bold; color: #475569; margin-bottom: 10px; }
+        .meta { color: #64748b; font-size: 13px; line-height: 1.7; }
+        .status { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; white-space: nowrap; }
+        .status.Applied { background: #dbeafe; color: #1d4ed8; }
+        .status.Shortlisted { background: #fef3c7; color: #b45309; }
+        .status.Selected { background: #dcfce7; color: #15803d; }
+        .status.Rejected { background: #fee2e2; color: #b91c1c; }
+        .empty { background: white; padding: 40px; border-radius: 12px; text-align: center; color: #64748b; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
+        .btn { display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 14px; border: none; cursor: pointer; }
+        .btn:hover { background: #1d4ed8; }
+        .banner { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
+        .banner a { color: #2563eb; font-weight: bold; }
+        .section-title { color: #1f2937; font-size: 18px; margin: 30px 0 14px; }
+        .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+        .btn-sm { padding: 8px 14px; font-size: 13px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; color: white; }
+        .b-short { background: #d97706; }
+        .b-rej { background: #dc2626; }
+        .b-sel { background: #16a34a; }
+        .b-reset { background: #64748b; }
+        details { margin-top: 14px; border-top: 1px dashed #e2e8f0; padding-top: 12px; }
+        summary { cursor: pointer; font-weight: bold; color: #16a34a; font-size: 14px; }
+        .drive-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .drive-form .full { grid-column: 1 / -1; }
+        .drive-form label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #334155; }
+        .drive-form input, .drive-form textarea { width: 100%; padding: 9px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        .drive-info { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; margin-top: 12px; font-size: 13px; color: #166534; }
+        .back { color: #2563eb; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .cover { margin-top: 10px; font-size: 13px; color: #475569; background: #f8fafc; padding: 10px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <div class="logo">CareerConnect &middot; Company</div>
+    <div class="nav-links">
+        <a href="/company/dashboard">My Jobs</a>
+        <a href="/company/jobs/new">+ Create Job</a>
+        <a href="/company/logout">Logout</a>
+    </div>
+</div>
+<div class="container">
+    <a href="/company/dashboard" class="back">← Back to My Jobs</a>
+
+    <h1 style="margin-top:15px;" th:text="${job.title}">Job</h1>
+    <p class="subtitle">
+        <span th:text="${#lists.size(applications)}">0</span> applicant(s) —
+        shortlist, reject, or select students and set their drive date.
+    </p>
+
+    <div class="empty" th:if="${#lists.isEmpty(applications)}">No students have applied yet.</div>
+
+    <div class="card" th:each="app : ${applications}">
+        <div class="row">
+            <div>
+                <h2 th:text="${app.user.name}">Student</h2>
+                <div class="meta">
+                    ✉ <span th:text="${app.user.email}"></span>
+                    <span th:if="${app.user.phone != null}"> &nbsp;|&nbsp; 📞 <span th:text="${app.user.phone}"></span></span>
+                    <br>
+                    <span th:text="${app.user.department}"></span>
+                    <span th:if="${app.user.college != null}"> &nbsp;|&nbsp; <span th:text="${app.user.college}"></span></span>
+                    <span th:if="${app.user.year != null}"> &nbsp;|&nbsp; Year <span th:text="${app.user.year}"></span></span>
+                    <span th:if="${app.user.cgpa != null}"> &nbsp;|&nbsp; CGPA <strong th:text="${app.user.cgpa}"></strong></span>
+                    <br>
+                    <span th:if="${app.user.skills != null}">Skills: <span th:text="${app.user.skills}"></span><br></span>
+                    Resume: <span th:text="${app.resume}"></span>
+                    &nbsp;|&nbsp; Applied <span th:text="${#temporals.format(app.appliedAt, 'dd MMM yyyy')}"></span>
+                </div>
+            </div>
+            <span class="status" th:classappend="${app.status}" th:text="${app.status}">Applied</span>
+        </div>
+
+        <div class="cover" th:if="${app.coverLetter != null}" th:text="${app.coverLetter}">Cover letter</div>
+
+        <div class="drive-info" th:if="${app.driveDate != null}">
+            🗓 Drive on <strong th:text="${#temporals.format(app.driveDate, 'dd MMM yyyy')}"></strong>
+            <span th:if="${app.driveTime != null and !#strings.isEmpty(app.driveTime)}"> at <span th:text="${app.driveTime}"></span></span>
+            <span th:if="${app.driveVenue != null and !#strings.isEmpty(app.driveVenue)}"> — <span th:text="${app.driveVenue}"></span></span>
+        </div>
+
+        <div class="actions">
+            <form th:action="@{/company/applications/{id}/status(id=${app.id})}" method="post"
+                  th:if="${app.status != 'Shortlisted'}">
+                <input type="hidden" name="status" value="Shortlisted">
+                <button type="submit" class="btn-sm b-short">Shortlist</button>
+            </form>
+            <form th:action="@{/company/applications/{id}/status(id=${app.id})}" method="post"
+                  th:if="${app.status != 'Rejected'}">
+                <input type="hidden" name="status" value="Rejected">
+                <button type="submit" class="btn-sm b-rej">Reject</button>
+            </form>
+            <form th:action="@{/company/applications/{id}/status(id=${app.id})}" method="post"
+                  th:if="${app.status != 'Applied'}">
+                <input type="hidden" name="status" value="Applied">
+                <button type="submit" class="btn-sm b-reset">Reset</button>
+            </form>
+        </div>
+
+        <details>
+            <summary th:text="${app.driveDate != null} ? 'Edit drive details' : 'Select student & set drive date'">Select student</summary>
+            <form th:action="@{/company/applications/{id}/select(id=${app.id})}" method="post" class="drive-form">
+                <div>
+                    <label>Drive Date *</label>
+                    <input type="date" name="driveDate" th:value="${app.driveDate}" required>
+                </div>
+                <div>
+                    <label>Time</label>
+                    <input type="text" name="driveTime" th:value="${app.driveTime}" placeholder="e.g. 10:00 AM">
+                </div>
+                <div class="full">
+                    <label>Venue / Link</label>
+                    <input type="text" name="driveVenue" th:value="${app.driveVenue}" placeholder="College Campus, Seminar Hall / meeting link">
+                </div>
+                <div class="full">
+                    <label>Notes for the student</label>
+                    <textarea name="driveNotes" rows="2" th:text="${app.driveNotes}"></textarea>
+                </div>
+                <div class="full">
+                    <button type="submit" class="btn-sm b-sel">Select &amp; Save Drive</button>
+                </div>
+            </form>
+        </details>
+    </div>
+</div>
+</body>
+</html>

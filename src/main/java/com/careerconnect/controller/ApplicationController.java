@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -82,6 +84,11 @@ public class ApplicationController {
             return "redirect:/jobs";
         }
 
+        // Student already applied for this job -> just show applications
+        if (applicationRepository.existsByUserAndJob(user, job)) {
+            return "redirect:/applications";
+        }
+
         // Connect application with logged-in student
         application.setUser(user);
 
@@ -120,15 +127,60 @@ public class ApplicationController {
             return "redirect:/login";
         }
 
-        // Get only this student's applications
+        // Applications still in progress (not yet moved to a placement drive)
         List<Application> applications =
-                applicationRepository.findByUser(user);
+                applicationRepository
+                        .findByUserAndDriveDateIsNullOrderByAppliedAtDesc(user);
 
         model.addAttribute(
                 "applications",
                 applications
         );
 
+        // Number of applications already moved to Placement Drives
+        model.addAttribute(
+                "driveCount",
+                applicationRepository
+                        .findByUserAndDriveDateIsNotNullOrderByDriveDateAsc(user)
+                        .size()
+        );
+
         return "applications";
+    }
+
+
+    // ================= PLACEMENT DRIVES =================
+
+    @GetMapping("/placement-drives")
+    public String placementDrives(
+            Model model,
+            HttpSession session) {
+
+        User user =
+                (User) session.getAttribute("loggedInUser");
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        LocalDate today = LocalDate.now();
+
+        List<Application> upcoming = new ArrayList<>();
+        List<Application> past = new ArrayList<>();
+
+        for (Application a : applicationRepository
+                .findByUserAndDriveDateIsNotNullOrderByDriveDateAsc(user)) {
+
+            if (a.getDriveDate().isBefore(today)) {
+                past.add(a);
+            } else {
+                upcoming.add(a);
+            }
+        }
+
+        model.addAttribute("upcomingDrives", upcoming);
+        model.addAttribute("pastDrives", past);
+
+        return "placement-drives";
     }
 }
